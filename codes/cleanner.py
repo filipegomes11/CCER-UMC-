@@ -6,17 +6,18 @@ import re
 
 def clean_csv(file_path, output_dir):
     df = pd.read_csv(file_path, encoding="ISO-8859-1")
-    # Drop duplicate rows
     df = df.drop_duplicates()
-    # Drop columns with all NaN values
     df = df.dropna(axis=1, how='all')
-    # Fill remaining NaN values with empty string
-    df = df.applymap(
-        lambda x: re.sub(r"[^a-zA-Z0-9\s.,;:!?@#%&\-_]", "", str(x)) if isinstance(x, str) else x
-    )
-    df = df.applymap(remove_accents)
+
+    for col in df.columns:
+        if "id" in col.lower():
+            continue
+        df[col] = df[col].map(
+            lambda x: re.sub(r"[^a-zA-Z0-9\s.,;:!?@#%&\-_]", "", str(x)) if isinstance(x, str) else x
+        )
+        df[col] = df[col].map(remove_accents)
+
     df = df.fillna('')
-    # Save cleaned file
     base = os.path.basename(file_path)
     output_path = os.path.join(output_dir, f"cleaned_{base}")
     df.to_csv(output_path, index=False)

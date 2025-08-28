@@ -25,7 +25,7 @@ def unique_mapping_clustering(G, t):
         sim, vi, vj = heapq.heappop(Q)
         sim = -sim
         if vi not in M1 and vj not in M2:
-            C.append({vi, vj, sim})
+            C.append((vi, vj, sim))
             M1.add(vi)
             M2.add(vj)
 
