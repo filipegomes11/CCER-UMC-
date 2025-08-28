@@ -10,7 +10,7 @@ def clean_csv(file_path, output_dir):
     df = df.dropna(axis=1, how='all')
 
     for col in df.columns:
-        if col.lower() == "id":
+        if "id" in col.lower():
             continue
         df[col] = df[col].map(
             lambda x: re.sub(r"[^a-zA-Z0-9\s.,;:!?@#%&\-_]", "", str(x)) if isinstance(x, str) else x

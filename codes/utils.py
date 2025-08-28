@@ -21,14 +21,12 @@ def export_clusters(clusters, path):
     df.to_csv(path, index=False)
 
 
-def evaluate_clusters(clusters, ground_truth, size1, size2):
-    """Calcula métricas de qualidade dos clusters.
+def evaluate_clusters(clusters, ground_truth):
+    """Calcula métricas de qualidade dos clusters usando o mapeamento limpo.
 
     Args:
         clusters (list[tuple[str, str, float]]): pares encontrados
         ground_truth (set[tuple[str, str]]): pares corretos
-        size1 (int): quantidade de instâncias no dataset 1
-        size2 (int): quantidade de instâncias no dataset 2
 
     Returns:
         dict: métricas calculadas
@@ -45,8 +43,10 @@ def evaluate_clusters(clusters, ground_truth, size1, size2):
 
     matched_v1 = {a for a, _, _ in clusters}
     matched_v2 = {b for _, b, _ in clusters}
-    parity1 = len(matched_v1) / size1 if size1 else 0.0
-    parity2 = len(matched_v2) / size2 if size2 else 0.0
+    gt_v1 = {a for a, _ in ground_truth}
+    gt_v2 = {b for _, b in ground_truth}
+    parity1 = len(matched_v1 & gt_v1) / len(gt_v1) if gt_v1 else 0.0
+    parity2 = len(matched_v2 & gt_v2) / len(gt_v2) if gt_v2 else 0.0
 
     return {
         "precision": precision,
