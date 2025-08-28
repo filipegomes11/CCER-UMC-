@@ -23,20 +23,10 @@ if __name__ == "__main__":
     google_path = cleaned_dir / "cleaned_GoogleProducts.csv"
 
     df_amazon = pd.read_csv(amazon_path, encoding="utf-8")
-    df_google = pd.read_csv(google_path, encoding="utf-8")
+    df_google = pd.read_csv(google_path, encoding="utf-8").rename(columns={"name": "title"})
 
-    dataset1 = list(
-        zip(
-            df_amazon["id"].astype(str),
-            df_amazon["title"].fillna("").astype(str),
-        )
-    )
-    dataset2 = list(
-        zip(
-            df_google["id"].astype(str),
-            df_google["name"].fillna("").astype(str),
-        )
-    )
+    dataset1 = df_amazon[["id", "title", "description", "manufacturer", "price"]]
+    dataset2 = df_google[["id", "title", "description", "manufacturer", "price"]]
 
     print(f"Carregados {len(dataset1)} produtos da Amazon e {len(dataset2)} do Google.")
 
