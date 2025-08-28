@@ -57,12 +57,15 @@ def build_similarity_graph(df1, df2, similarity_func: str = "cosine", weights=No
         tuple: (V1, V2, E)
     """
 
-    # Pesos padrão priorizando o nome/título
+    # Pesos padrão com ênfase máxima no título e valores mínimos para os demais
+    # atributos. A média ponderada é normalizada pelo somatório dos pesos, logo
+    # basta atribuir um valor muito maior ao título para que ele seja decisivo
+    # no cálculo da similaridade final.
     weights = weights or {
-        "title": 0.5,
-        "description": 0.2,
-        "manufacturer": 0.2,
-        "price": 0.1,
+        "title": 0.97,
+        "description": 0.01,
+        "manufacturer": 0.01,
+        "price": 0.01,
     }
 
     cols_text = [c for c in ["title", "description", "manufacturer"] if c in df1.columns and c in df2.columns]

@@ -30,9 +30,10 @@ if __name__ == "__main__":
 
     print(f"Carregados {len(dataset1)} produtos da Amazon e {len(dataset2)} do Google.")
 
-    G = build_similarity_graph(dataset1, dataset2, similarity_func="cosine")
+    weights = {"title": 0.97, "description": 0.01, "manufacturer": 0.01, "price": 0.01}
+    G = build_similarity_graph(dataset1, dataset2, similarity_func="cosine", weights=weights)
 
-    clusters, unmatched_V1, unmatched_V2 = unique_mapping_clustering(G, t=0.5)
+    clusters, unmatched_V1, unmatched_V2 = unique_mapping_clustering(G, t=0.3)
 
     export_clusters(clusters, "umc_results.csv")
 
